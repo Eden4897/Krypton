@@ -58,16 +58,36 @@ module.exports = {
             return notif(msg.channel, `<@${member.id}> was already muted.`)
         }
 
-        if(bot.isMod(member)){
+        if(await bot.isMod(member)){
             return error(msg.channel, `<@${member.id}> is a mod; i cannot mute them.`)
         }
 
-        await member.roles.add(role)
-        .then(async () => {
-            await success(msg.channel, `<@${member.id}> is muted.`);
+        let reason = msg.content.slice(args[0].length + 7);
+
+        if(!reason){
+            reason = "undefined";
+        }
+
+        notif(member.user, `You have been muted in ${msg.guild.name} for: \`${reason}\`.`)
+        .then(async dm => {
+            await member.roles.remove(role)
+            .then(async () => {
+                success(msg.channel, `User <@!${member.id}> was muted.`);
+            })
+            .catch(async () => {
+                error(msg.channel, `I can't mute user <@${member.id}>.`);
+                if(dm) dm.delete();
+            });
         })
         .catch(async () => {
-            await error(msg.channel, `I do not have the permissions to mute <@${member.id}>.`);
-        })
+            await member.roles.remove(role)
+            .then(async () => {
+                success(msg.channel, `User <@!${member.id}> was muted. Their DMs were closed.`);
+            })
+            .catch(async () => {
+                error(msg.channel, `I can't mute user <@${member.id}>.`);
+                if(dm) dm.delete();
+            });
+        });
 	},
 }

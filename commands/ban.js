@@ -32,21 +32,26 @@ module.exports = {
             reason = "undefined";
         }
 
-        let dm;
-        let isDmable = " Their DM was closed."
-
-        await notif(member.user, `You have been banned from ${msg.guild.name} for: \`${reason}\`.`).then(m => {
-            dm = m;
-        }).catch(isDmable = "");
-
-        await member.ban({ days: 7, reason: reason })
-        .then(async () => {
-            success(msg.channel, `User <@!${member.id}> was banned.${isDmable}`);
+        notif(member.user, `You have been banned from ${msg.guild.name} for: \`${reason}\`.`)
+        .then(async dm => {
+            await member.ban({ days: 7, reason: reason })
+            .then(async () => {
+                success(msg.channel, `User <@!${member.id}> was banned.`);
+            })
+            .catch(async () => {
+                error(msg.channel, `I can't kban user <@${member.id}>.`);
+                if(dm) dm.delete();
+            });
         })
         .catch(async () => {
-            error(msg.channel, `I can't ban <@${member.id}>.`);
-            await dm;
-            dm.delete();
+            await member.ban({ days: 7, reason: reason })
+            .then(async () => {
+                success(msg.channel, `User <@!${member.id}> was banned. Their DMs were closed.`);
+            })
+            .catch(async () => {
+                error(msg.channel, `I can't ban user <@${member.id}>.`);
+                if(dm) dm.delete();
+            });
         });
 	},
 }

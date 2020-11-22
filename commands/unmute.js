@@ -1,4 +1,3 @@
-const { remove } = require("../models/guild");
 const {error, success, notif} = require("../utils/logging");
 
 module.exports = {

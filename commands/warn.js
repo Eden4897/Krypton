@@ -50,7 +50,7 @@ module.exports = {
             success(msg.channel, `${member.user.tag} has been warned. ID: ${settings.lastWarnID + 1}`);
         })
         .catch(() => {
-            success(msg.channel, `${member.user.tag} has been warned. Their DM was closed. ID: ${settings.lastWarnID + 1}`);
+            success(msg.channel, `${member.user.tag} has been warned. Their DMs were closed. ID: ${settings.lastWarnID + 1}`);
         });
 	},
 }

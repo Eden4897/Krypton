@@ -32,21 +32,26 @@ module.exports = {
             reason = "undefined";
         }
 
-        let dm;
-        let isDmable = " Their DM was closed."
-
-        await notif(member.user, `You have been kicked from ${msg.guild.name} for: \`${reason}\`. You can rejoin if someone invites you.`).then(m => {
-            dm = m;
-        }).catch(isDmable = "");
-
-        await member.kick({ reason: reason })
-        .then(async () => {
-            success(msg.channel, `User <@!${member.id}> was kicked.${isDmable}`);
+        notif(member.user, `You have been kicked from ${msg.guild.name} for: \`${reason}\`. You can rejoin if someone invites you.`)
+        .then(async dm => {
+            await member.kick({ reason: reason })
+            .then(async () => {
+                success(msg.channel, `User <@!${member.id}> was kicked.`);
+            })
+            .catch(async () => {
+                error(msg.channel, `I can't kick user <@${member.id}>.`);
+                if(dm) dm.delete();
+            });
         })
         .catch(async () => {
-            error(msg.channel, `I can't kick user <@${member.id}>.`);
-            await dm;
-            dm.delete();
+            await member.kick({ reason: reason })
+            .then(async () => {
+                success(msg.channel, `User <@!${member.id}> was kicked. Their DMs were closed.`);
+            })
+            .catch(async () => {
+                error(msg.channel, `I can't kick user <@${member.id}>.`);
+                if(dm) dm.delete();
+            });
         });
 	},
 }
