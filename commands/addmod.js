@@ -4,10 +4,12 @@ const Guild = require("../models/guild");
 
 module.exports = {
     name: 'addmod',
-    description: 'adds a role as a mod.',
+    description: 'Adds a role as a mod',
+    usage: "{p}addmod [role]",
+    example: "{p}addmod @Mods\n{p}addmod 780068153937887303\n{p}addmod Moderators",
     admin: true,
     args: 1,
-	async execute(bot, msg, args) {
+	async execute(bot, msg, args, help) {
         let mod = null;
         if(msg.mentions.roles.first()){
             mod = msg.mentions.roles.first();

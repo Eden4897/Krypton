@@ -2,10 +2,12 @@ const {error, success, notif} = require("../utils/logging");
 
 module.exports = {
     name: 'softban',
-    description: 'Softbans a user.',
+    description: 'Softbans a user',
+    usage: "{p}softban [user] (reason)",
+    example: "{p}softban <@401376663541252096>\n{p}softban Eden Bye!\n{p}softban 401376663541252096",
     admin: true,
     args: 1,
-	async execute(bot, msg, args) {
+	async execute(bot, msg, args, help) {
         let member;
         if(msg.mentions.members.first()){
             // Find member by mentioning
@@ -32,22 +34,27 @@ module.exports = {
             reason = "undefined";
         }
 
-        let dm;
-        let isDmable = " Their DM was closed."
-
-        await notif(member.user, `You have been softbanned from ${msg.guild.name} for: \`${reason}\`. You can rejoin if someone invites you.`).then(m => {
-            dm = m;
-        }).catch(isDmable = "");
-
-        await member.ban({ days: 7, reason: reason })
-        .then(async () => {
-            success(msg.channel, `User <@!${member.id}> was softbanned.${isDmable}`);
-            await msg.guild.members.unban(member.id);
+        notif(member.user, `You have been softbanned from ${msg.guild.name} for: \`${reason}\`. You can rejoin if someone invites you.`)
+        .then(async dm => {
+            await member.ban({ days: 7, reason: reason })
+            .then(async () => {
+                await msg.guild.members.unban(member.id);
+                success(msg.channel, `User <@!${member.id}> was softbanned.`);
+            })
+            .catch(async () => {
+                error(msg.channel, `I can't softban user <@${member.id}>.`);
+                if(dm) dm.delete();
+            });
         })
         .catch(async () => {
-            error(msg.channel, `I can't softban <@${member.id}>.`);
-            await dm;
-            dm.delete();
+            await member.ban({ days: 7, reason: reason })
+            .then(async () => {
+                await msg.guild.members.unban(member.id);
+                success(msg.channel, `User <@!${member.id}> was softbanned. Their DMs were closed.`);
+            })
+            .catch(async () => {
+                error(msg.channel, `I can't softban user <@${member.id}>.`);
+            });
         });
 	},
 }

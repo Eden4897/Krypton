@@ -3,10 +3,12 @@ const Guild = require("../models/guild");
 
 module.exports = {
     name: 'delwarn',
-    description: 'Warns a user.',
+    description: 'Warns a user',
+    usage: "{p}delwarn [warning ID]",
+    example: "{p}delwarn 123",
     admin: true,
     args: 1,
-	async execute(bot, msg, args) {
+	async execute(bot, msg, args, help) {
         const guild = await Guild.findOne({
             guildID: msg.guild.id
         });

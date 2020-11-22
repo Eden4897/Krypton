@@ -4,10 +4,12 @@ const Guild = require("../models/guild");
 
 module.exports = {
     name: 'listmods',
-    description: 'List all mods.',
+    description: 'List all mods',
+    usage: "{p}listmods",
+    example: "{p}listmods",
     admin: true,
     args: 0,
-	async execute(bot, msg, args) {
+	async execute(bot, msg, args, help) {
         const settings = await Guild.findOne({
             guildID: msg.guild.id
         })

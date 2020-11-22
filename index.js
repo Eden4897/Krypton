@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const fs = require("fs");
 const { config } = require("dotenv");
+const Guild = require("./models/guild");
 
 config({
     path: `${__dirname}/.env`
@@ -10,6 +11,20 @@ const bot = new Discord.Client();
 module.exports.bot = bot;
 bot.commands = new Discord.Collection();
 bot.mongoose = require("./utils/mongoose");
+bot.isMod = async function isMod(member){
+    if(member.hasPermission("MANAGE_GUILD")) return true;
+    
+    const guildSettings = await Guild.findOne({
+        guildID: member.guild.id
+    })
+    const mods = guildSettings.mods;
+
+    mods.forEach(mod => {
+        if(member.roles.cache.has(mod)) return true;
+    })
+
+    return false;
+};
 
 fs.readdir("./commands/", (err, files) => {
     if(err) return console.error;
