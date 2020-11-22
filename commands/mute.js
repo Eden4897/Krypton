@@ -70,7 +70,7 @@ module.exports = {
 
         notif(member.user, `You have been muted in ${msg.guild.name} for: \`${reason}\`.`)
         .then(async dm => {
-            await member.roles.remove(role)
+            await member.roles.add(role)
             .then(async () => {
                 success(msg.channel, `User <@!${member.id}> was muted.`);
             })
@@ -80,7 +80,7 @@ module.exports = {
             });
         })
         .catch(async () => {
-            await member.roles.remove(role)
+            await member.roles.add(role)
             .then(async () => {
                 success(msg.channel, `User <@!${member.id}> was muted. Their DMs were closed.`);
             })

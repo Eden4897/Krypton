@@ -52,7 +52,6 @@ module.exports = {
             })
             .catch(async () => {
                 error(msg.channel, `I can't softban user <@${member.id}>.`);
-                if(dm) dm.delete();
             });
         });
 	},
