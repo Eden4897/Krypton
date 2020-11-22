@@ -1,0 +1,24 @@
+{
+	"name": "krypton",
+	"version": "0.0.1",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Eden4897/Krypton.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/Eden4897/Krypton/issues"
+	},
+	"homepage": "https://github.com/Eden4897/Krypton#readme",
+	"dependencies": {
+		"discord.js": "^12.4.1",
+		"dotenv": "^8.2.0",
+		"mongoose": "^5.10.15"
+	}
+}
