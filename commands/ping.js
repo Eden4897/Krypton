@@ -1,4 +1,5 @@
-const Discord = require("discord.js");
+const { MessageEmbed } = require("discord.js");
+const {error, success, notif} = require("../utils/logging");
 
 module.exports = {
     name: 'ping',
@@ -8,13 +9,14 @@ module.exports = {
     admin: false,
     args: 0,
 	async execute(bot, msg, args, help) {
-		const pinging = await msg.channel.send('🏓 Pinging...');
+		const pinging = await notif(msg.channel, "🏓 Pinging...");
 
-        const embed = new Discord.MessageEmbed()
-        .setColor(process.env.COLOR)
-        .setTitle('🏓 Pong!')
+        const embed = new MessageEmbed()
+        .setColor("#3B88C3")
+        .setTitle("🏓 Pong!")
         .setDescription(`Bot Latency is **${Math.floor(pinging.createdTimestamp - msg.createdTimestamp)} ms** \nAPI Latency is **${Math.round(bot.ws.ping)} ms**`);
 
+        pinging.delete();
         await msg.channel.send(embed);
 	},
 }
