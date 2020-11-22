@@ -37,7 +37,7 @@ module.exports = async (bot, msg) => {
     if(message.substring(0, PREFIX.length) == PREFIX){
         if (bot.commands.has(args[0])){
             try {
-                if(bot.commands.get(args[0]).admin && !await isMod(msg.member)){
+                if(bot.commands.get(args[0]).admin && !await bot.isMod(msg.member)){
                     return error(msg.channel, "Access denied.");
                 }
                 if(args.length - 1 < bot.commands.get(args[0]).args){
@@ -52,18 +52,3 @@ module.exports = async (bot, msg) => {
         }
     }
 };
-
-async function isMod(member){
-    if(member.hasPermission("MANAGE_GUILD")) return true;
-    
-    const guildSettings = await Guild.findOne({
-        guildID: member.guild.id
-    })
-    const mods = guildSettings.mods;
-
-    mods.forEach(mod => {
-        if(member.roles.cache.has(mod)) return true;
-    })
-
-    return false;
-}

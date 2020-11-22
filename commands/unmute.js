@@ -31,14 +31,14 @@ module.exports = {
         
         if(member.roles.cache.some(r => r.id == role.id)){
             member.roles.remove(role)
-            .then(() => {
-                success(msg.channel, `<@${member.id}> has been unmuted.`);
+            .then(async () => {
+                await success(msg.channel, `<@${member.id}> has been unmuted.`);
             })
-            .catch(() => {
-                error(msg.channel, `I cannot unmute <@${member.id}>.`);
+            .catch(async () => {
+                await error(msg.channel, `I cannot unmute <@${member.id}>.`);
             })
         }else{
-            error(msg.channel, `<@${member.id}> is not muted!`);
+            await notif(msg.channel, `<@${member.id}> is not muted!`);
         }
 	},
 }

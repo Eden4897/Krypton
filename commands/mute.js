@@ -1,5 +1,4 @@
 const {error, success, notif} = require("../utils/logging");
-const Guild = require("../models/guild");
 
 module.exports = {
     name: 'mute',
@@ -7,7 +6,6 @@ module.exports = {
     admin: true,
     args: 1,
 	async execute(bot, msg, args) {
-
         let role = await msg.guild.roles.cache.find(r => r.name == "Muted");
 
         if(!role){
@@ -56,6 +54,20 @@ module.exports = {
             return error(msg.channel, `I can't find user ${args[0]}.`);
         }
 
-        member.roles.add(role);
+        if(member.roles.cache.some(r => r.id == role.id)){
+            return notif(msg.channel, `<@${member.id}> was already muted.`)
+        }
+
+        if(bot.isMod(member)){
+            return error(msg.channel, `<@${member.id}> is a mod; i cannot mute them.`)
+        }
+
+        await member.roles.add(role)
+        .then(async () => {
+            await success(msg.channel, `<@${member.id}> is muted.`);
+        })
+        .catch(async () => {
+            await error(msg.channel, `I do not have the permissions to mute <@${member.id}>.`);
+        })
 	},
 }
