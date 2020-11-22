@@ -3,10 +3,12 @@ const Guild = require("../models/guild");
 
 module.exports = {
     name: 'warn',
-    description: 'Warns a user.',
+    description: 'Warns a user',
+    usage: "{p}warn [user] [reason]",
+    example: "{p}warn <@401376663541252096> Disrespecful\n{p}warn Eden No swearing\n{p}warn 401376663541252096 Posting advertisements",
     admin: true,
     args: 2,
-	async execute(bot, msg, args) {
+	async execute(bot, msg, args, help) {
         let member;
         if(msg.mentions.members.first()){
             // Find member by mentioning

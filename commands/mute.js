@@ -2,10 +2,12 @@ const {error, success, notif} = require("../utils/logging");
 
 module.exports = {
     name: 'mute',
-    description: 'Mutes a user.',
+    description: 'Mutes a user',
+    usage: "{p}mute [user] (reason)",
+    example: "{p}mute <@401376663541252096>\n{p}mute Eden Spamming too much\n{p}mute401376663541252096",
     admin: true,
     args: 1,
-	async execute(bot, msg, args) {
+	async execute(bot, msg, args, help) {
         let role = await msg.guild.roles.cache.find(r => r.name == "Muted");
 
         if(!role){

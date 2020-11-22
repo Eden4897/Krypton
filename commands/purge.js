@@ -3,9 +3,11 @@ const {error, success} = require("../utils/logging");
 module.exports = {
     name: 'purge',
     description: 'Purges messages',
+    usage: "{p}purge [number]\n{p}purge [user] [number]\n{p}purge startswith [prefix]\n{p}purge endswith [postfix]\n{p}purge attatchments [number]\n{p}purge mentions [number]\n{p}purge embeds [number]\n{p}purge text [number]\n{p}purge human [number]\n{p}purge bot [number]",
+    example: "{p}purge 50\n{p}purge Eden 80\n{p}purge 401376663541252096 78\n{p}purge startswith hello\n{p}purge endswith .\n{p}purge attatchments 5\n{p}purge mentions 15\n{p}purge embeds 30\n{p}purge text 40\n{p}purge human 100\n{p}purge bot 70",
     admin: true,
     args: 1,
-	async execute(bot, msg, args) {
+	async execute(bot, msg, args, help) {
         await msg.delete();
         // If there is a member pinged
         if(parseInt(args[1]) && msg.mentions.members.first()){
@@ -70,6 +72,8 @@ module.exports = {
                     filter = (m) => m.author.bot;
                     limit = args[1];
                 break;
+                case "defalt":
+                    return msg.channel.send(help);
             }
 
             if(filter){

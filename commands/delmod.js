@@ -4,10 +4,12 @@ const Guild = require("../models/guild");
 
 module.exports = {
     name: 'delmod',
-    description: 'Removes a role as a mod.',
+    description: 'Removes a role as a mod',
+    usage: "{p}delmod [role]",
+    example: "{p}delmod @Mods\n{p}delmod 780068153937887303\n{p}delmod Moderators",
     admin: true,
     args: 1,
-	async execute(bot, msg, args) {
+	async execute(bot, msg, args, help) {
         let mod = null;
         if(msg.mentions.roles.first()){
             mod = msg.mentions.roles.first();

@@ -2,10 +2,12 @@ const {error, success, notif} = require("../utils/logging");
 
 module.exports = {
     name: 'tempmute',
-    description: 'Temporarily mutes a user.',
+    description: 'Temporarily mutes a user',
+    usage: "{p}tempmute [user] [time] (reason)",
+    example: "{p}tempmute <@401376663541252096> 20d Spamming in general\n{p}tempmute Eden 20s\n{p}tempmute 401376663541252096 90m\m{p}tempmute Eden 8h Discord invites in general",
     admin: true,
     args: 1,
-	async execute(bot, msg, args) {
+	async execute(bot, msg, args, help) {
         let role = await msg.guild.roles.cache.find(r => r.name == "Muted");
 
         if(!role){
@@ -73,7 +75,9 @@ module.exports = {
         const durationText = args[1].substring(0, args[1].length - 1);
         const durationUnit = args[1].substring(args[1].length - 1, args[1].length);
 
-        if(!parseInt(durationText)) return msg.delete();
+        if(!parseInt(durationText)) return msg.channel.send(help);
+        if(parseInt(durationText) < 0) return msg.channel.send(help);
+
         switch(durationUnit){
             case "s":
                 duration = parseInt(durationText) * 1000;

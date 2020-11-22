@@ -4,9 +4,11 @@ const Guild = require("../models/guild");
 module.exports = {
     name: 'prefix',
     description: 'Changes the prefix of the server',
+    usage: "{p}prefix [New Prefix]",
+    example: "{p}prefix ?\n{p}prefix krypton",
     admin: true,
     args: 1,
-	async execute(bot, msg, args) {
+	async execute(bot, msg, args, help) {
         await Guild.findOneAndUpdate({
             guildID: msg.guild.id
         }, {

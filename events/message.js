@@ -1,6 +1,7 @@
 const Guild = require("../models/guild");
 const { defaultGuild } = require("../models/guild");
 const {error, notif, success} = require("../utils/logging");
+const { MessageEmbed } = require("discord.js");
 
 module.exports = async (bot, msg) => {
     if(msg.author.bot) return;
@@ -40,10 +41,33 @@ module.exports = async (bot, msg) => {
                 if(bot.commands.get(args[0]).admin && !await bot.isMod(msg.member)){
                     return error(msg.channel, "Access denied.");
                 }
-                if(args.length - 1 < bot.commands.get(args[0]).args){
-                    return error(msg.channel, "Insufficant parameters.");
+                const command = bot.commands.get(args[0]);
+
+                let description = "**Description: **";
+                description += command.description.replace(/{p}/g, PREFIX);
+                description += "\n";
+
+                description += "**Usage: **";
+                if(command.usage.includes("\n")){
+                    description += "\n";
                 }
-                await bot.commands.get(args[0]).execute(bot, msg, args.slice(1));
+                description += command.usage.replace(/{p}/g, PREFIX);
+                description += "\n";
+
+                description += "**Examples: **";
+                if(command.example.includes("\n")){
+                    description += "\n";
+                }
+                description += command.example.replace(/{p}/g, PREFIX);
+
+                const embed = new MessageEmbed()
+                .setTitle(`Command: ${PREFIX}${args[0]}`)
+                .setDescription(description);
+
+                if(args.length - 1 < bot.commands.get(args[0]).args){
+                    return msg.channel.send(embed);
+                }
+                await bot.commands.get(args[0]).execute(bot, msg, args.slice(1), embed);
 
             } catch (err) {
                 console.error(err);

@@ -2,10 +2,12 @@ const {error, success, notif} = require("../utils/logging");
 
 module.exports = {
     name: 'softban',
-    description: 'Softbans a user.',
+    description: 'Softbans a user',
+    usage: "{p}softban [user] (reason)",
+    example: "{p}softban <@401376663541252096>\n{p}softban Eden Bye!\n{p}softban 401376663541252096",
     admin: true,
     args: 1,
-	async execute(bot, msg, args) {
+	async execute(bot, msg, args, help) {
         let member;
         if(msg.mentions.members.first()){
             // Find member by mentioning

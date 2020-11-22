@@ -2,10 +2,12 @@ const {error, success, notif} = require("../utils/logging");
 
 module.exports = {
     name: 'tempban',
-    description: 'Temporarily bans a user.',
+    description: 'Temporarily bans a user',
+    usage: "{p}tempban [user] [time] (reason)",
+    example: "{p}tempban <@401376663541252096> 20d See you later\n{p}tempban Eden 20s\n{p}tempban 401376663541252096 90m\m{p}tempban Eden 8h Go to sleep",
     admin: true,
     args: 2,
-	async execute(bot, msg, args) {
+	async execute(bot, msg, args, help) {
         let member;
         if(msg.mentions.members.first()){
             // Find member by mentioning
@@ -37,7 +39,9 @@ module.exports = {
         const durationText = args[1].substring(0, args[1].length - 1);
         const durationUnit = args[1].substring(args[1].length - 1, args[1].length);
 
-        if(!parseInt(durationText)) return msg.delete();
+        if(!parseInt(durationText)) return msg.channel.send(help);
+        if(parseInt(durationText) < 0) return msg.channel.send(help);
+        
         switch(durationUnit){
             case "s":
                 duration = parseInt(durationText) * 1000;

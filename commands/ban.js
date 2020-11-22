@@ -2,10 +2,12 @@ const {error, success, notif} = require("../utils/logging");
 
 module.exports = {
     name: 'ban',
-    description: 'Bans a user.',
+    description: 'Bans a user',
+    usage: "{p}ban [user] (reason)",
+    example: "{p}ban <@401376663541252096>\n{p}ban Eden Bye!\n{p}ban 401376663541252096",
     admin: true,
     args: 1,
-	async execute(bot, msg, args) {
+	async execute(bot, msg, args, help) {
         let member;
         if(msg.mentions.members.first()){
             // Find member by mentioning

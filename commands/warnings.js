@@ -4,10 +4,12 @@ const { MessageEmbed } = require("discord.js");
 
 module.exports = {
     name: 'warnings',
-    description: 'List all warnings of a user.',
+    description: 'List all warnings of a user',
+    usage: "{p}warnings [user]",
+    example: "{p}warnings <@401376663541252096>\n{p}warnings Eden\n{p}warnings 401376663541252096",
     admin: true,
     args: 1,
-	async execute(bot, msg, args) {
+	async execute(bot, msg, args, help) {
         let member;
         if(msg.mentions.members.first()){
             // Find member by mentioning
