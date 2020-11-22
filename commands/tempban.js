@@ -55,8 +55,6 @@ module.exports = {
                 return msg.delete();
         }
 
-        console.log(duration);
-
         notif(member.user, `You have been banned from ${msg.guild.name} for: \`${reason}\`.`)
         .then(async dm => {
             await member.ban({ days: 7, reason: reason })
@@ -64,7 +62,7 @@ module.exports = {
                 success(msg.channel, `User <@!${member.id}> was banned.`);
 
                 setTimeout(()=>{
-                    msg.guild.members.unban(member.id);
+                    msg.guild.members.unban(member.id).catch();
                 }, duration);
             })
             .catch(async () => {
@@ -78,7 +76,7 @@ module.exports = {
                 success(msg.channel, `User <@!${member.id}> was banned. Their DMs were closed.`);
 
                 setTimeout(()=>{
-                    msg.guild.members.unban(member.id);
+                    msg.guild.members.unban(member.id).catch();
                 }, duration);
             })
             .catch(async () => {
